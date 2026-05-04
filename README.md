@@ -1,4 +1,4 @@
-# Survey Form（アンケートフォーム）
+# Survey Form（メンター予約フォーム）
 
 ## 概要
 PHP + MySQLで作成したアンケートフォームです。  
