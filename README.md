@@ -14,10 +14,14 @@ Qiitaで作成過程を公開しています。
 - データベース保存
 - 確認画面・完了画面
 
-## 画面
+## 画面イメージ
 
-- index.php
-C:\Users\momot\OneDrive\ドキュメント\MyPortfolioBackup\image\index.jpg
+### 入力画面（index.php）
+
+メンター予約に必要な情報を入力する画面です。  
+必須項目、チェックボックス、緊急度スライダーを配置しています。
+
+![入力画面](images/index.jpg)
 
 ## 実装予定
 - 一覧表示
