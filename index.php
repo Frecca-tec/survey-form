@@ -63,23 +63,23 @@
   <!-- onsubmit : フォーム送信の直前に実行される処理（バリデーションチェック）-->
   <form method="post" action="confirm.php" onsubmit="return validateForm()">
     <label for="name">お名前 ※ : </label>
-    <input type="text" id="name" name="name" value="<?= h($name) ?>" placeholder="例：山田太郎">
+    <input type="text"  id="name" name="name" value="<?= h($name) ?>" placeholder="例：山田太郎" required>
     <br>
     <label for="email">メールアドレス ※ : </label>
-    <input type="email" id="email" name="email" value="<?= h($email) ?>">
+    <input type="email" id="email" name="email" value="<?= h($email) ?>" required>
     <br>
     <label for="telephone">電話番号(任意) : </label>
     <input type="tel" id="telephone" name="telephone" value="<?= h($telephone) ?>">
     <br>
     <label for="reservation_date">予約日 ※ : </label>
-    <input type="date" id="reservation_date" name="reservation_date" value="<?= h($reservation_date) ?>">
+    <input type="date" id="reservation_date" name="reservation_date" value="<?= h($reservation_date) ?>" required>
     <br>
     <label for="reservation_time">予約時間 ※ : </label>
-    <input type="time" id="reservation_time" name="reservation_time" value="<?= h($reservation_time) ?>">
+    <input type="time" id="reservation_time" name="reservation_time" value="<?= h($reservation_time) ?>" required>
     <br>
 
     <label for="consultation_method">相談方法 ※ : </label>
-    <input type="radio" id="online" name="consultation_method" value="オンライン"  <?= $consultation_method === 'オンライン' ? 'checked' : '' ?>>
+    <input type="radio" id="online" name="consultation_method" value="オンライン" required <?= $consultation_method === 'オンライン' ? 'checked' : '' ?>>
     <label for="online">オンライン（Zoom）</label>
     <input type="radio" id="phone" name="consultation_method" value="電話" <?= $consultation_method === '電話' ? 'checked' : '' ?>>
     <label for="phone">電話</label>
@@ -138,7 +138,7 @@
 
     <div class="range-area">
     <label for="details">相談内容の詳細 ※ : </label>
-    <textarea id="details" name="details" rows="5" cols="40" placeholder="〇〇のエラーが出ており、△△を試しましたが解決しません"><?= h($details) ?></textarea>
+    <textarea required id="details" name="details" rows="5" cols="40" placeholder="〇〇のエラーが出ており、△△を試しましたが解決しません"><?= h($details) ?></textarea>
     </div>
     <br>
 
@@ -161,16 +161,16 @@
   <br>
 
   <label for="privacy_policy_accepted">プライバシーポリシーに同意する(必須) : </label>
-  <input type="checkbox" id="privacy_policy_accepted" name="privacy_policy_accepted" value="1">
+  <input type="checkbox" id="privacy_policy_accepted" name="privacy_policy_accepted" value="1" required>
   <br>
   <label for="terms_accepted">利用規約に同意する(必須) : </label>
-  <input type="checkbox" id="terms_accepted" name="terms_accepted" value="1">
+  <input type="checkbox" id="terms_accepted" name="terms_accepted" value="1" required>
   <br>
   <label for="data_usage_accepted">データ利用に同意する(必須) : </label>
-  <input type="checkbox" id="data_usage_accepted" name="data_usage_accepted" value="1">
+  <input type="checkbox" id="data_usage_accepted" name="data_usage_accepted" value="1" required>
   <br>
   <label for="cancellation_policy_accepted">当日のキャンセルポリシーに同意する(必須) : </label>
-  <input type="checkbox" id="cancellation_policy_accepted" name="cancellation_policy_accepted" value="1">  
+  <input type="checkbox" id="cancellation_policy_accepted" name="cancellation_policy_accepted" value="1" required>
   <br>
   <input type="submit" value="確認">
   </form>
@@ -180,12 +180,12 @@
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 
 <script>
-  <!-- スライダーの値をリアルタイムで表示するためのJavaScript -->
+  // スライダーの値をリアルタイムで表示するためのJavaScript
    $('#urgency_level').on('input', function() {
     $('#urgencyValue').text(this.value);
   });
 
-  <!-- フォームのバリデーションチェック -->
+  // フォームのバリデーションチェック
   function validateForm() {
 
     // エラーを格納する配列
