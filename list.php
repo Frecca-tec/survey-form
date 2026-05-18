@@ -6,12 +6,62 @@ require_once 'db.php';
 // データベースに接続
 $dbh = connectionDB();
 
+// 並び替え条件を取得
+$sort = $_GET['sort'] ?? 'id_asc';
+
+// 初期値（登録日時の新しい順）
+$orderBy = 'id ASC';
+
+// 並び替え条件を変更
+if ($sort === 'id_asc') {
+    $orderBy = 'id ASC';
+}
+elseif ($sort === 'id_desc') {
+    $orderBy = 'id DESC';
+}
+elseif ($sort === 'created_at_asc') {
+    $orderBy = 'created_at ASC';
+}
+elseif ($sort === 'created_at_desc') {
+    $orderBy = 'created_at DESC';
+} 
+elseif ($sort === 'reservation_date_asc') {
+    $orderBy = 'reservation_date ASC, reservation_time ASC';
+} 
+elseif ($sort === 'reservation_date_desc') {
+    $orderBy = 'reservation_date DESC, reservation_time DESC';
+}
+elseif($sort === 'urgency_level_desc') {
+    $orderBy = 'urgency_level DESC';
+}
+else if ($sort === 'urgency_level_asc') {
+    $orderBy = 'urgency_level ASC';
+}
+
+// 検索キーワードを取得
+$keyword = $_GET['keyword'] ?? '';
+$where = '';
+$params = [];
+
+if ($keyword !== '') {
+    $where = 'WHERE name LIKE :keyword';
+    //あいまい検索用 % : 前後にワイルドカードを追加して、部分一致検索を可能にする
+    $params[':keyword'] = '%' . $keyword . '%';
+}
+
 // 予約データを取得
 try {
-  $sql = 'SELECT * FROM reservations';
+  // $sql = 'SELECT * FROM reservations';
+  // $orderBy(並び替え）をSQL文に組み込む
+  $sql = "SELECT * FROM reservations {$where} ORDER BY {$orderBy}";
 
   // PDOが安全なSQLとして準備
   $stmt = $dbh->prepare($sql);
+
+  //$params 検索条件の荷物箱
+  foreach ($params as $key => $value) {
+    $stmt->bindValue($key, $value, PDO::PARAM_STR);
+  }
 
   // SQLを実行
   $stmt->execute();
@@ -31,49 +81,95 @@ try {
 <head>
     <meta charset="UTF-8">
     <title>予約一覧</title>
+    <!-- Bootstrap CSS -->
+  <link
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+    rel="stylesheet"
+  >
 </head>
 <body>
-    <h1>予約一覧</h1>
+  <!-- d-flex : 横並びの要素を配置 -->
+  <!-- fluid px-3 : コンテナの左右のパディングを設定 -->
+  <div class="container-fluid px-3">
+
+  <div class="d-flex align-items-center gap-3 mb-3">
+    <h1 class="m-0">予約一覧</h1>
+    <a href="index.php" class="btn btn-primary">
+        入力画面へ戻る
+      </a>
+  </div>
+
+  <div class="mb-3">
+  <a href="list.php?sort=id_asc" class="btn btn-outline-dark btn-sm">ID 昇順</a>
+  <a href="list.php?sort=id_desc" class="btn btn-outline-dark btn-sm">ID 降順</a>
+  <a href="list.php?sort=created_at_desc" class="btn btn-outline-secondary btn-sm">新しい順</a>
+  <a href="list.php?sort=created_at_asc" class="btn btn-outline-secondary btn-sm">古い順</a>
+  <a href="list.php?sort=name_asc" class="btn btn-outline-success  btn-sm">名前 昇順</a>
+  <a href="list.php?sort=name_desc" class="btn btn-outline-success btn-sm">名前 降順</a>
+  <a href="list.php?sort=reservation_date_asc" class="btn btn-outline-primary btn-sm">予約日順</a>
+  <a href="list.php?sort=reservation_date_desc" class="btn btn-outline-primary btn-sm">予約日順（降順）</a>
+  <a href="list.php?sort=urgency_level_desc" class="btn btn-outline-danger btn-sm">緊急度（降順）</a>
+  <a href="list.php?sort=urgency_level_asc" class="btn btn-outline-danger btn-sm">緊急度（昇順）</a>
+  
+  <!-- 検索フォーム -->
+  <form method="get" action="list.php" class="mb-3 d-flex align-items-center gap-2">
+  <input
+    type="text"
+    name="keyword"
+    class="form-control w-auto"
+    placeholder="名前で検索"
+    value="<?= h($keyword) ?>"
+  >
+  <input type="hidden" name="sort" value="<?= h($sort) ?>">
+  <button type="submit" class="btn btn-primary btn-sm">検索</button>
+  <a href="list.php" class="btn btn-secondary btn-sm">リセット</a>
+  </form>
+  
+  </div>
+
+    <!-- 予約データがない場合のメッセージ -->
     <?php if (count($reservations) === 0): ?>
     <p>予約データはまだありません。</p>
     <?php else: ?>
-    <table border="1">
+    <!-- table-hover : ホバー時に行の背景色が変化する -->
+    <table class="table table-hover">
+      <thead class="table-dark text-center">
         <tr>
           <!-- テーブルのヘッダー -->
             <th>ID</th>
             <th>お名前</th>
-            <th>メール</th>
-            <th>電話番号</th>
             <th>予約日</th>
             <th>予約時間</th>
             <th>相談方法</th>
-            <th>学習言語</th>
-            <th>OS環境</th>
-            <th>相談カテゴリー</th>
-            <th>相談内容の詳細</th>
             <th>緊急度</th>
             <th>登録日時</th>
+            <th colspan="3">操作</th>
         </tr>
+      </thead>
         <!-- データを表示 -->
         <?php foreach ($reservations as $reservation): ?>
         <tr>
             <td><?= h($reservation['id']) ?></td>
             <td><?= h($reservation['name']) ?></td>
-            <td><?= h($reservation['email']) ?></td>
-            <td><?= h($reservation['telephone']) ?></td>
             <td><?= h($reservation['reservation_date']) ?></td>
             <td><?= h($reservation['reservation_time']) ?></td>
             <td><?= h($reservation['consultation_method']) ?></td>
-            <td><?= h($reservation['learning_languages']) ?></td>
-            <td><?= h($reservation['os_env']) ?></td>
-            <td><?= h($reservation['consultation_categories']) ?></td>
-            <td><?= h($reservation['details']) ?></td>
             <td><?= h($reservation['urgency_level']) ?></td>
             <td><?= h($reservation['created_at']) ?></td>
+            <td>
+              <!-- 詳細リンク -->
+              <a href="detail.php?id=<?= h($reservation['id']) ?>" class="btn btn-info btn-sm">詳細</a>
+              <!-- 編集リンク -->
+              <!-- btn-sm : ボタンを小さく表示 -->
+                <a href="edit.php?id=<?= h($reservation['id']) ?>" class="btn btn-success btn-sm">編集</a>
+              <!-- 削除リンク -->
+              <a href="delete.php?id=<?= h($reservation['id']) ?>" class="btn btn-danger btn-sm" 
+              onclick="return confirm('本当に削除しますか？')">削除</a>
+            </td>
         </tr>
         <?php endforeach; ?>
     </table>
     <?php endif; ?>
-    <p><a href="index.php">入力画面へ戻る</a></p>
-</body>
+  </div>
+  </body>
 </html>
