@@ -20,6 +20,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <title>メンター予約フォーム（入力）</title>
 </head>
 
@@ -171,8 +172,10 @@
   <br>
   <label for="cancellation_policy_accepted">当日のキャンセルポリシーに同意する(必須) : </label>
   <input type="checkbox" id="cancellation_policy_accepted" name="cancellation_policy_accepted" value="1" required>
-  <br>
-  <input type="submit" value="確認">
+  <br><br>
+  <input type="submit" class="btn btn-primary" value="確認">
+  <input type="reset" class="btn btn-secondary" value="リセット">
+  <a href="list.php" class="btn btn-info">データ一覧表示</a>
   </form>
 
 </body>
