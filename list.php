@@ -9,34 +9,18 @@ $dbh = connectionDB();
 // 並び替え条件を取得
 $sort = $_GET['sort'] ?? 'id_asc';
 
-// 初期値（登録日時の新しい順）
-$orderBy = 'id ASC';
-
 // 並び替え条件を変更
-if ($sort === 'id_asc') {
-    $orderBy = 'id ASC';
-}
-elseif ($sort === 'id_desc') {
-    $orderBy = 'id DESC';
-}
-elseif ($sort === 'created_at_asc') {
-    $orderBy = 'created_at ASC';
-}
-elseif ($sort === 'created_at_desc') {
-    $orderBy = 'created_at DESC';
-} 
-elseif ($sort === 'reservation_date_asc') {
-    $orderBy = 'reservation_date ASC, reservation_time ASC';
-} 
-elseif ($sort === 'reservation_date_desc') {
-    $orderBy = 'reservation_date DESC, reservation_time DESC';
-}
-elseif($sort === 'urgency_level_desc') {
-    $orderBy = 'urgency_level DESC';
-}
-else if ($sort === 'urgency_level_asc') {
-    $orderBy = 'urgency_level ASC';
-}
+$orderBy = match ($sort) {
+    'id_asc' => 'id ASC',
+    'id_desc' => 'id DESC',
+    'created_at_asc' => 'created_at ASC',
+    'created_at_desc' => 'created_at DESC',
+    'reservation_date_asc' => 'reservation_date ASC, reservation_time ASC',
+    'reservation_date_desc' => 'reservation_date DESC, reservation_time DESC',
+    'urgency_level_desc' => 'urgency_level DESC',
+    'urgency_level_asc' => 'urgency_level ASC',
+    default => 'id ASC',
+};
 
 // 検索キーワードを取得
 $keyword = $_GET['keyword'] ?? '';
