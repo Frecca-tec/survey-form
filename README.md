@@ -1,12 +1,10 @@
 # Survey Form（メンター予約フォーム）
 
 ## 概要
-PHP + MySQLで作成したメンター予約フォームです。  
-入力内容のバリデーション、データ保存機能を実装しています。
-今後も機能拡張を予定しています。
-Qiitaで作成過程を公開しています。
-
-※現在開発中のプロジェクトです。
+PHP + MySQL + Dockerで作成したメンター予約フォーム＆管理システムです。
+入力内容のバリデーション、データ登録、検索・並び替え機能を実装しています。
+Docker Composeを利用してPHP・MySQL・phpMyAdminの開発環境を構築しています。
+現在も機能追加・改善を継続しています。
 
 ## 機能
 - メンター予約フォーム入力機能
@@ -20,6 +18,7 @@ Qiitaで作成過程を公開しています。
   - 登録日時順
   - 予約日時順
   - 緊急度順
+  - 名前順
 
 ## 画面イメージ
 
@@ -54,7 +53,7 @@ Qiitaで作成過程を公開しています。
 ### 
 
 ## 実装予定
-- 一覧表示
+- 詳細表示機能
 - 編集フォーム
 - 削除機能
 - 更新機能
@@ -63,9 +62,13 @@ Qiitaで作成過程を公開しています。
 ## 使用技術
 - PHP
 - MySQL
+- PDO
 - HTML / CSS
 - JavaScript
 - jQuery
+- Docker
+- Docker Compose
+- phpMyAdmin
 - Bootstrap (導入予定)
 
 ## 工夫した点
@@ -117,10 +120,23 @@ Qiitaで作成過程を公開しています。
 - サーバー保存およびDB連携
 
 
-## 動作方法
+## Dockerでの起動方法
+
+docker compose up -d --build
+
+アクセス先
+
+アプリ
+http://localhost:8080
+
+phpMyAdmin
+http://localhost:8081
+
+
+## 従来の起動方法
 1. XAMPPを起動
-2. `htdocs`配下に配置
-3. ブラウザで `http://localhost/surveyform` にアクセス
+2. htdocs配下に配置
+3. ブラウザでアクセス
 
 ## 作者
 - フレッカ （GitHub: frecca-dev）

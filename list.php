@@ -19,6 +19,8 @@ $orderBy = match ($sort) {
     'reservation_date_desc' => 'reservation_date DESC, reservation_time DESC',
     'urgency_level_desc' => 'urgency_level DESC',
     'urgency_level_asc' => 'urgency_level ASC',
+    'name_asc' => 'name ASC',
+    'name_desc' => 'name DESC',
     default => 'id ASC',
 };
 
