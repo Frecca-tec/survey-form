@@ -29,6 +29,7 @@ $keyword = $_GET['keyword'] ?? '';
 $where = '';
 $params = [];
 
+
 if ($keyword !== '') {
     $where = 'WHERE name LIKE :keyword';
     //あいまい検索用 % : 前後にワイルドカードを追加して、部分一致検索を可能にする
